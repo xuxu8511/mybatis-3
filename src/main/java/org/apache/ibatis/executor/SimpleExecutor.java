@@ -53,13 +53,19 @@ public class SimpleExecutor extends BaseExecutor {
     }
   }
 
+  //重要
+  //实现调用jdbc的转换
   @Override
   public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
     Statement stmt = null;
     try {
+      //获取configuration对象
       Configuration configuration = ms.getConfiguration();
+      //获取statementhandler对象
       StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
+      //获取数据库连接，获取会话对象，参数设置
       stmt = prepareStatement(handler, ms.getStatementLog());
+      //执行sql
       return handler.query(stmt, resultHandler);
     } finally {
       closeStatement(stmt);
@@ -81,6 +87,9 @@ public class SimpleExecutor extends BaseExecutor {
     return Collections.emptyList();
   }
 
+
+  //构建StatementHandler对象
+  //StatementHandler很重要
   private Statement prepareStatement(StatementHandler handler, Log statementLog) throws SQLException {
     Statement stmt;
     Connection connection = getConnection(statementLog);

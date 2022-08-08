@@ -36,6 +36,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 /**
  * @author Clinton Begin
  */
+//N.A 根Executor一样重要的类
 public abstract class BaseStatementHandler implements StatementHandler {
 
   protected final Configuration configuration;

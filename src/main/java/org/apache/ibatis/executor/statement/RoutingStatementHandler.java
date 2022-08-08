@@ -51,7 +51,6 @@ public class RoutingStatementHandler implements StatementHandler {
       default:
         throw new ExecutorException("Unknown statement type: " + ms.getStatementType());
     }
-
   }
 
   @Override

@@ -23,12 +23,19 @@ public class ErrorContext {
   private static final String LINE_SEPARATOR = System.lineSeparator();
   private static final ThreadLocal<ErrorContext> LOCAL = ThreadLocal.withInitial(ErrorContext::new);
 
+  //用于store和recall方法
   private ErrorContext stored;
+  //发生在哪个资源文件中
   private String resource;
+  //做什么操作时发生
   private String activity;
+  //处理哪个对象操作时发生异常
   private String object;
+  //异常的概览信息
   private String message;
+  //发生在哪个SQL语句
   private String sql;
+  //详细的堆栈信息
   private Throwable cause;
 
   private ErrorContext() {

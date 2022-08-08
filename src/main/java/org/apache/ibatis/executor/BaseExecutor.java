@@ -131,8 +131,13 @@ public abstract class BaseExecutor implements Executor {
 
   @Override
   public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
+    //构建绑定的sql
     BoundSql boundSql = ms.getBoundSql(parameter);
+    //构建缓存对象key
     CacheKey key = createCacheKey(ms, parameter, rowBounds, boundSql);
+    //1.如果二级缓存打开，则查询二级缓存，命中返回，否则，
+    //2.查询一级缓存，命中返回，否则，
+    //3.查询数据库
     return query(ms, parameter, rowBounds, resultHandler, key, boundSql);
   }
 
@@ -320,6 +325,7 @@ public abstract class BaseExecutor implements Executor {
 
   private <E> List<E> queryFromDatabase(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
     List<E> list;
+    //为什么要先插入一个站位值？
     localCache.putObject(key, EXECUTION_PLACEHOLDER);
     try {
       list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
